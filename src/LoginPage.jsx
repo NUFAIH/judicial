@@ -39,7 +39,7 @@ function Login(){
             <div className="pw">
                 <label>password</label>
                 <input onChange={(e) => setpassword(e.target.value)}
-                    type="text"
+                    type="password"
                     value={password}
                     required
                 />
