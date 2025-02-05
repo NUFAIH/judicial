@@ -54,3 +54,44 @@ body {
     padding: 10px;
     text-align: center;
   }
+
+  .home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center everything horizontally */
+    gap: 20px; /* Adds space between sections */
+    padding: 20px;
+  }
+  
+  .about-box, .roles {
+    width: 80%; /* Adjust width as needed */
+    max-width: 800px; /* Prevents sections from getting too wide */
+    text-align: center;
+  }
+  
+  .roles {
+    margin-top: 0; /* Remove unwanted margins */
+    padding-top: 0; /* Ensures it sits right below the About box */
+  }
+  
+  .role-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* Ensures responsiveness */
+  }
+  
+  .role-card {
+    padding: 15px 25px;
+    background: #646cff;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  
+  .role-card:hover {
+    background: #535bf2;
+  }
+  

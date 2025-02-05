@@ -31,8 +31,21 @@ body {
 }
 
 h1 {
-  font-size: 3.2em;
+  font-family: 'Josefin Sans';
+  font-weight: 300;
+  font-size: 600px;
   line-height: 1.1;
+}
+
+h2 {
+  font-family: 'Alumni Sans Pinstripe';
+  font-weight: bold;
+}
+
+p {
+  font-family: 'Josefin Sans';
+  font-weight: 300;
+  font-size: large;
 }
 
 button {
