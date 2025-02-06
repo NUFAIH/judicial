@@ -2,13 +2,13 @@ const express = require("express");
 const router = express.Router();
 const mysql = require("mysql");
 
-// Create MySQL Connection Pool (better than `createConnection`)
+// Create MySQL Connection Pool
 const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "helloworld",
     database: "judicialsys",
-    connectionLimit: 10, // Prevents connection issues
+    connectionLimit: 10,
 });
 
 // Middleware to ensure database connection
@@ -22,7 +22,7 @@ db.getConnection((err) => {
 
 // Get all cases
 router.get("/", (req, res) => {
-    const sql = "SELECT * FROM cases;";
+    const sql = "SELECT * FROM cases WHERE status != 'Resolved' ORDER BY created_at DESC;";
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json(results);
@@ -45,22 +45,45 @@ router.post("/", (req, res) => {
 
     const { case_number, case_type, court_id, status } = req.body;
 
-    // Ensure all required fields are provided
     if (!case_number || !case_type || !court_id || !status) {
-        console.log("❌ Missing field(s) in request:", req.body);
         return res.status(400).json({ message: "All fields are required" });
     }
 
     const sql = "INSERT INTO cases (case_number, case_type, court_id, status) VALUES (?, ?, ?, ?);";
     
     db.query(sql, [case_number, case_type, parseInt(court_id), status], (err, result) => {
-        if (err) {
-            console.error("❌ MySQL Error:", err.sqlMessage);
-            return res.status(500).json({ error: err.sqlMessage });
-        }
+        if (err) return res.status(500).json({ error: err.sqlMessage });
         res.json({ message: "✅ Case added successfully", id: result.insertId });
     });
 });
 
-// Export the router
+// Update an existing case
+router.put("/:id", (req, res) => {
+    console.log("✏️ Updating case ID:", req.params.id, "with data:", req.body);
+
+    const { case_number, case_type, court_id, status } = req.body;
+    if (!case_number || !case_type || !court_id || !status) {
+        return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const sql = "UPDATE cases SET case_number = ?, case_type = ?, court_id = ?, status = ? WHERE id = ?;";
+    db.query(sql, [case_number, case_type, parseInt(court_id), status, req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (result.affectedRows === 0) return res.status(404).json({ message: "Case not found" });
+        res.json({ message: "✅ Case updated successfully" });
+    });
+});
+
+// Delete a case
+router.delete("/:id", (req, res) => {
+    console.log("🗑️ Deleting case ID:", req.params.id);
+    
+    const sql = "DELETE FROM cases WHERE id = ?;";
+    db.query(sql, [req.params.id], (err, result) => {
+        if (err) return res.status(500).json({ error: err.sqlMessage });
+        if (result.affectedRows === 0) return res.status(404).json({ message: "Case not found" });
+        res.json({ message: "✅ Case deleted successfully" });
+    });
+});
+
 module.exports = router;

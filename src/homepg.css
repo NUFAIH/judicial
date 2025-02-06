@@ -83,7 +83,7 @@ body {
   
   .role-card {
     padding: 15px 25px;
-    background: #646cff;
+    background: #303030;
     color: white;
     font-weight: bold;
     border-radius: 8px;
@@ -92,6 +92,6 @@ body {
   }
   
   .role-card:hover {
-    background: #535bf2;
+    background: #838383;
   }
   
